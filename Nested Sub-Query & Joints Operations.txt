@@ -1,0 +1,149 @@
+mysql> create database sample;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use sample;
+Database changed
+
+mysql> create table demo_people (name char(20), phone varchar(30), pid int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> describe demo_people;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | char(20)    | YES  |     | NULL    |       |
+| phone | varchar(30) | YES  |     | NULL    |       |
+| pid   | int(11)     | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table demo_property (pid int, spid int, selling char(20));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> describe demo_property;
++---------+----------+------+-----+---------+-------+
+| Field   | Type     | Null | Key | Default | Extra |
++---------+----------+------+-----+---------+-------+
+| pid     | int(11)  | YES  |     | NULL    |       |
+| spid    | int(11)  | YES  |     | NULL    |       |
+| selling | char(20) | YES  |     | NULL    |       |
++---------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into demo_people(name, phone, pid) values ('Mr Brown', 012256, 1), ('Miss Smith', 012257, 2), ('Mr Pullen', 012258, 3);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into demo_property(pid, spid, selling) values (1, 1, 'Old House Farm'), (3, 2, 'The Willows'), (3, 3, 'Tall Trees'), (3, 4, 'The Melksham Florist'), (4, 5, 'Dun Roamin');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from demo_people;
++------------+-------+------+
+| name       | phone | pid  |
++------------+-------+------+
+| Mr Brown   | 12256 |    1 |
+| Miss Smith | 12257 |    2 |
+| Mr Pullen  | 12258 |    3 |
++------------+-------+------+
+3 rows in set (0.00 sec)
+
+mysql> select * from demo_property;
++------+------+----------------------+
+| pid  | spid | selling              |
++------+------+----------------------+
+|    1 |    1 | Old House Farm       |
+|    3 |    2 | The Willows          |
+|    3 |    3 | Tall Trees           |
+|    3 |    4 | The Melksham Florist |
+|    4 |    5 | Dun Roamin           |
++------+------+----------------------+
+5 rows in set (0.00 sec)
+
+mysql> select name, phone, selling from demo_people join demo_property on demo_people.pid = demo_property.pid;
++-----------+-------+----------------------+
+| name      | phone | selling              |
++-----------+-------+----------------------+
+| Mr Brown  | 12256 | Old House Farm       |
+| Mr Pullen | 12258 | The Willows          |
+| Mr Pullen | 12258 | Tall Trees           |
+| Mr Pullen | 12258 | The Melksham Florist |
++-----------+-------+----------------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, phone, selling from demo_people left join demo_property on demo_people.pid = demo_property.pid;
++------------+-------+----------------------+
+| name       | phone | selling              |
++------------+-------+----------------------+
+| Mr Brown   | 12256 | Old House Farm       |
+| Miss Smith | 12257 | NULL                 |
+| Mr Pullen  | 12258 | The Willows          |
+| Mr Pullen  | 12258 | Tall Trees           |
+| Mr Pullen  | 12258 | The Melksham Florist |
++------------+-------+----------------------+
+5 rows in set (0.00 sec)
+       
+mysql> select name, phone, selling from demo_people right join demo_property on demo_people.pid = demo_property.pid;
++-----------+-------+----------------------+
+| name      | phone | selling              |
++-----------+-------+----------------------+
+| Mr Brown  | 12256 | Old House Farm       |
+| Mr Pullen | 12258 | The Willows          |
+| Mr Pullen | 12258 | Tall Trees           |
+| Mr Pullen | 12258 | The Melksham Florist |
+| NULL      | NULL  | Dun Roamin           |
++-----------+-------+----------------------+
+5 rows in set (0.00 sec)
+
+mysql> create table payments (CustomerNumber int, checkNumber varchar(30), amount int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into payments(CustomerNumber, checkNumber, amount) values (101, 'JE105477', 1000), (201, 'ME105480', 2000), (301, 'BE105485', 1500), (401, 'EE105482', 900);
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from payments;
++----------------+-------------+--------+
+| CustomerNumber | checkNumber | amount |
++----------------+-------------+--------+
+|            101 | JE105477    |   1000 |
+|            201 | ME105480    |   2000 |
+|            301 | BE105485    |   1500 |
+|            401 | EE105482    |    900 |
++----------------+-------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select customerNumber, checkNumber, amount from payments where amount = (select max(amount) from payments);
++----------------+-------------+--------+
+| customerNumber | checkNumber | amount |
++----------------+-------------+--------+
+|            201 | ME105480    |   2000 |
++----------------+-------------+--------+
+1 row in set (0.01 sec)
+
+mysql> create view x as select * from demo_people where demo_people.pid = demo_people.pid;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from X;
++------------+-------+------+
+| name       | phone | pid  |
++------------+-------+------+
+| Mr Brown   | 12256 |    1 |
+| Miss Smith | 12257 |    2 |
+| Mr Pullen  | 12258 |    3 |
++------------+-------+------+
+3 rows in set (0.00 sec)
+
+mysql> create view y as select name, pid from demo_people where demo_people.pid = demo_people.pid;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from y;
++------------+------+
+| name       | pid  |
++------------+------+
+| Mr Brown   |    1 |
+| Miss Smith |    2 |
+| Mr Pullen  |    3 |
++------------+------+
+3 rows in set (0.00 sec)
+

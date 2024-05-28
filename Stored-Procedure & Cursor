@@ -1,0 +1,82 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| btech              |
+| dbms               |
+| demoprocedure      |
+| information_schema |
+| my                 |
+| mysql              |
+| name_database      |
+| performance_schema |
+| sample             |
+| stock              |
+| student            |
+| sys                |
+| tydbms             |
+| university         |
++--------------------+
+15 rows in set (0.03 sec)
+
+mysql> use demoprocedure;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select * from stock;
++----------+------------+--------------------+
+| stock_no | item       | quantity_available |
++----------+------------+--------------------+
+|        1 | pen        |                 23 |
+|        2 | books      |                  7 |
+|        3 | pencils    |                  4 |
+|        4 | stationary |                 15 |
++----------+------------+--------------------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter @@
+mysql> create procedure check_stock()
+    -> begin
+    -> declare SNO int;
+    -> declare item varchar(20);
+    -> declare QA int;
+    -> declare done int default false;
+    -> declare CS cursor for select * from stock;
+    -> declare continue handler for not found set done = true;
+    -> create temporary table stockcheck(stock_no int, item varchar(20), quantity_available int);
+    -> open CS;
+    -> read_loop: loop
+    -> fetch CS into SNO, item, QA;
+    -> if done then
+    -> leave read_loop;
+    -> end if;
+    -> if QA<10 then
+    -> insert into stockcheck values(SNO, item, QA);
+    -> end if;
+    -> end loop;
+    -> close CS;
+    -> if not exists(select * from stockcheck) then
+    -> select 'Enough stock for all items' as message;
+    -> else
+    -> select * from stockcheck;
+    -> end if;
+    -> end @@
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> call check_stock();
+    -> @@
++----------+---------+--------------------+
+| stock_no | item    | quantity_available |
++----------+---------+--------------------+
+|        2 | books   |                  7 |
+|        3 | pencils |                  4 |
++----------+---------+--------------------+
+2 rows in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop procedure check_stock;
+    -> @@
+Query OK, 0 rows affected (0.09 sec)
+

@@ -1,0 +1,433 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| abc                |
+| bank               |
+| empdata            |
+| mysql              |
+| performance_schema |
+| sample             |
+| test               |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> drop database abc;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> create database btech;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use btech;
+Database changed
+mysql> create table student (roll_no int, name char(20), marks char(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> describe student;
++---------+----------+------+-----+---------+-------+
+| Field   | Type     | Null | Key | Default | Extra |
++---------+----------+------+-----+---------+-------+
+| roll_no | int(11)  | YES  |     | NULL    |       |
+| name    | char(20) | YES  |     | NULL    |       |
+| marks   | char(20) | YES  |     | NULL    |       |
++---------+----------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+mysql> alter table student add age int after marks, add address char after age, add mobile int after address;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe student;
++---------+----------+------+-----+---------+-------+
+| Field   | Type     | Null | Key | Default | Extra |
++---------+----------+------+-----+---------+-------+
+| roll_no | int(11)  | YES  |     | NULL    |       |
+| name    | char(20) | YES  |     | NULL    |       |
+| marks   | char(20) | YES  |     | NULL    |       |
+| age     | int(11)  | YES  |     | NULL    |       |
+| address | char(1)  | YES  |     | NULL    |       |
+| mobile  | int(11)  | YES  |     | NULL    |       |
++---------+----------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table student modify name varchar(20) after roll_no, modify address varchar(20) after age, modify mobile va
+rchar(20) after address;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int(11)     | YES  |     | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| marks   | char(20)    | YES  |     | NULL    |       |
+| age     | int(11)     | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
+| mobile  | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table student drop column mobile;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int(11)     | YES  |     | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| marks   | char(20)    | YES  |     | NULL    |       |
+| age     | int(11)     | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table student change column name f_name varchar(20) after roll_no;
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int(11)     | YES  |     | NULL    |       |
+| f_name  | varchar(20) | YES  |     | NULL    |       |
+| marks   | char(20)    | YES  |     | NULL    |       |
+| age     | int(11)     | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table student rename to stud;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> describe stud;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int(11)     | YES  |     | NULL    |       |
+| f_name  | varchar(20) | YES  |     | NULL    |       |
+| marks   | char(20)    | YES  |     | NULL    |       |
+| age     | int(11)     | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.02 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_btech |
++-----------------+
+| stud            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> insert into stud(roll_no, f_name, marks, age, address) values(1, 'raj', 80, 20, 'dhule');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from stud;
++---------+--------+-------+------+---------+
+| roll_no | f_name | marks | age  | address |
++---------+--------+-------+------+---------+
+|       1 | raj    | 80    |   20 | dhule   |
++---------+--------+-------+------+---------+
+1 row in set (0.00 sec)
+
+mysql> alter table stud add column l_name varchar(20) after f_name;
+Query OK, 1 row affected (0.01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> insert into stud(roll_no, f_name, l_name, marks, age, address) values(2, 'sham', 'patil', 90, 19, 'dhule'),(3, 'ram', 'patil', 85, 20, 'deopur');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from stud;
++---------+--------+--------+-------+------+---------+
+| roll_no | f_name | l_name | marks | age  | address |
++---------+--------+--------+-------+------+---------+
+|       1 | raj    | NULL   | 80    |   20 | dhule   |
+|       2 | sham   | patil  | 90    |   19 | dhule   |
+|       3 | ram    | patil  | 85    |   20 | deopur  |
++---------+--------+--------+-------+------+---------+
+3 rows in set (0.00 sec)
+
+mysql> insert into stud(l_name) values('patil');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from stud;
++---------+--------+--------+-------+------+---------+
+| roll_no | f_name | l_name | marks | age  | address |
++---------+--------+--------+-------+------+---------+
+|       1 | raj    | NULL   | 80    |   20 | dhule   |
+|       2 | sham   | patil  | 90    |   19 | dhule   |
+|       3 | ram    | patil  | 85    |   20 | deopur  |
+|    NULL | NULL   | patil  | NULL  | NULL | NULL    |
++---------+--------+--------+-------+------+---------+
+4 rows in set (0.00 sec)
+
+mysql> update stud set l_name='patil' where l_name IS NULL;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from stud;
++---------+--------+--------+-------+------+---------+
+| roll_no | f_name | l_name | marks | age  | address |
++---------+--------+--------+-------+------+---------+
+|       1 | raj    | patil  | 80    |   20 | dhule   |
+|       2 | sham   | patil  | 90    |   19 | dhule   |
+|       3 | ram    | patil  | 85    |   20 | deopur  |
+|    NULL | NULL   | patil  | NULL  | NULL | NULL    |
++---------+--------+--------+-------+------+---------+
+4 rows in set (0.00 sec)
+
+mysql> delete from stud where roll_no IS NULL;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from stud;
++---------+--------+--------+-------+------+---------+
+| roll_no | f_name | l_name | marks | age  | address |
++---------+--------+--------+-------+------+---------+
+|       1 | raj    | patil  | 80    |   20 | dhule   |
+|       2 | sham   | patil  | 90    |   19 | dhule   |
+|       3 | ram    | patil  | 85    |   20 | deopur  |
++---------+--------+--------+-------+------+---------+
+3 rows in set (0.00 sec)
+
+mysql> create table it(Name varchar(20), Roll_No int, Sub1 varchar(20), Sub2 var
+char(20), Sub3 varchar(20), Total int, Percentage double);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> describe it;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| Name       | varchar(20) | YES  |     | NULL    |       |
+| Roll_No    | int(11)     | YES  |     | NULL    |       |
+| Sub1       | varchar(20) | YES  |     | NULL    |       |
+| Sub2       | varchar(20) | YES  |     | NULL    |       |
+| Sub3       | varchar(20) | YES  |     | NULL    |       |
+| Total      | int(11)     | YES  |     | NULL    |       |
+| Percentage | double      | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> alter table it modify column Roll_No int primary key;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe it;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| Name       | varchar(20) | YES  |     | NULL    |       |
+| Roll_No    | int(11)     | NO   | PRI | NULL    |       |
+| Sub1       | varchar(20) | YES  |     | NULL    |       |
+| Sub2       | varchar(20) | YES  |     | NULL    |       |
+| Sub3       | varchar(20) | YES  |     | NULL    |       |
+| Total      | int(11)     | YES  |     | NULL    |       |
+| Percentage | double      | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+7 rows in set (0.02 sec)
+
+mysql> insert into it(Name, Roll_No, Sub1, Sub2, Sub3, Total, Percentage) values('Ram', 1, 'OS', 'DBMS', 'DWDM', 50, 80), ('Sonu', 2, 'OS', 'DBMS', 'DWDM',
+60, 90), ('Sham', 3, 'OS', 'DBMS', 'DWDM', 45, 75), ('Monu', 4, 'OS', 'DBMS', 'DWDM', 65, 95);
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from it;
++------+---------+------+------+------+-------+------------+
+| Name | Roll_No | Sub1 | Sub2 | Sub3 | Total | Percentage |
++------+---------+------+------+------+-------+------------+
+| Ram  |       1 | OS   | DBMS | DWDM |    50 |         80 |
+| Sonu |       2 | OS   | DBMS | DWDM |    60 |         90 |
+| Sham |       3 | OS   | DBMS | DWDM |    45 |         75 |
+| Monu |       4 | OS   | DBMS | DWDM |    65 |         95 |
++------+---------+------+------+------+-------+------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into it(Name, Roll_No, Sub1, Sub2, Sub3, Total, Percentage) values('Ganu', 4, 'OS', 'DBMS', 'DWDM', 55, 90);
+ERROR 1062 (23000): Duplicate entry '4' for key 'PRIMARY'
+
+mysql> insert into it(Name, Roll_No, Sub1, Sub2, Sub3, Total, Percentage) values('Ganu', 5, 'OS', 'DBMS', 'DWDM', 55, 90);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from it;
++------+---------+------+------+------+-------+------------+
+| Name | Roll_No | Sub1 | Sub2 | Sub3 | Total | Percentage |
++------+---------+------+------+------+-------+------------+
+| Ram  |       1 | OS   | DBMS | DWDM |    50 |         80 |
+| Sonu |       2 | OS   | DBMS | DWDM |    60 |         90 |
+| Sham |       3 | OS   | DBMS | DWDM |    45 |         75 |
+| Monu |       4 | OS   | DBMS | DWDM |    65 |         95 |
+| Ganu |       5 | OS   | DBMS | DWDM |    55 |         90 |
++------+---------+------+------+------+-------+------------+
+5 rows in set (0.01 sec)
+
+mysql> alter table it modify column Roll_No int auto_increment;
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into it(Name, Sub1, Sub2, Sub3, Total, Percentage) values('Sunny', 'OS', 'DBMS', 'DWDM', 70, 98);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from it;
++-------+---------+------+------+------+-------+------------+
+| Name  | Roll_No | Sub1 | Sub2 | Sub3 | Total | Percentage |
++-------+---------+------+------+------+-------+------------+
+| Ram   |       1 | OS   | DBMS | DWDM |    50 |         80 |
+| Sonu  |       2 | OS   | DBMS | DWDM |    60 |         90 |
+| Sham  |       3 | OS   | DBMS | DWDM |    45 |         75 |
+| Monu  |       4 | OS   | DBMS | DWDM |    65 |         95 |
+| Ganu  |       5 | OS   | DBMS | DWDM |    55 |         90 |
+| Sunny |       6 | OS   | DBMS | DWDM |    70 |         98 |
++-------+---------+------+------+------+-------+------------+
+6 rows in set (0.00 sec)
+
+
+// Foreign Key
+
+mysql> create table courses (course1 varchar(20), course2 varchar(20), course3 varchar(20), course4 varchar(20),Roll_No int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_btech |
++-----------------+
+| courses         |
+| it              |
+| stud            |
++-----------------+
+3 rows in set (0.00 sec)
+
+mysql> describe courses;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| course1 | varchar(20) | YES  |     | NULL    |       |
+| course2 | varchar(20) | YES  |     | NULL    |       |
+| course3 | varchar(20) | YES  |     | NULL    |       |
+| course4 | varchar(20) | YES  |     | NULL    |       |
+| Roll_No | int(11)     | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.02 sec)
+
+mysql> alter table courses add foreign key(Roll_No) references it(Roll_No);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe courses;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| course1 | varchar(20) | YES  |     | NULL    |       |
+| course2 | varchar(20) | YES  |     | NULL    |       |
+| course3 | varchar(20) | YES  |     | NULL    |       |
+| course4 | varchar(20) | YES  |     | NULL    |       |
+| Roll_No | int(11)     | YES  | MUL | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.02 sec)
+
+mysql> describe it;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| Name       | varchar(20) | YES  |     | NULL    |                |
+| Roll_No    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Sub1       | varchar(20) | YES  |     | NULL    |                |
+| Sub2       | varchar(20) | YES  |     | NULL    |                |
+| Sub3       | varchar(20) | YES  |     | NULL    |                |
+| Total      | int(11)     | YES  |     | NULL    |                |
+| Percentage | double      | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> insert into courses(course1, course2, course3, course4, Roll_No) values('ai', 'ml', 'ds', 'cp', 1), ('ai', 'ml', 'ds', 'cp', 2);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from courses;
++--------+---------+---------+---------+---------+
+| course1| course2 | course3 | course4 | Roll_No |
++--------+---------+---------+---------+---------+
+| ai     | ml      | ds      | cp      |       1 |
+| ai     | ml      | ds      | cp      |       2 |
++--------+---------+---------+---------+---------+
+2 rows in set (0.00 sec)
+
+mysql> delete from it where Roll_No = 1;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`btech`.`courses`, CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`Roll_No`) REFERENCES `it` (`Roll_No`))
+
+mysql> delete from courses where Roll_No = 1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from it;
++-------+---------+------+------+------+-------+------------+
+| Name  | Roll_No | Sub1 | Sub2 | Sub3 | Total | Percentage |
++-------+---------+------+------+------+-------+------------+
+| Ram   |       1 | OS   | DBMS | DWDM |    50 |         80 |
+| Sonu  |       2 | OS   | DBMS | DWDM |    60 |         90 |
+| Sham  |       3 | OS   | DBMS | DWDM |    45 |         75 |
+| Monu  |       4 | OS   | DBMS | DWDM |    65 |         95 |
+| Ganu  |       5 | OS   | DBMS | DWDM |    55 |         90 |
+| Sunny |       6 | OS   | DBMS | DWDM |    70 |         98 |
++-------+---------+------+------+------+-------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from courses;
++--------+---------+---------+---------+---------+
+| course1| course2 | course3 | course4 | Roll_No |
++--------+---------+---------+---------+---------+
+| ai     | ml      | ds      | cp      |       2 |
++--------+---------+---------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> delete from it where Roll_No = 1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from it;
++-------+---------+------+------+------+-------+------------+
+| Name  | Roll_No | Sub1 | Sub2 | Sub3 | Total | Percentage |
++-------+---------+------+------+------+-------+------------+
+| Sonu  |       2 | OS   | DBMS | DWDM |    60 |         90 |
+| Sham  |       3 | OS   | DBMS | DWDM |    45 |         75 |
+| Monu  |       4 | OS   | DBMS | DWDM |    65 |         95 |
+| Ganu  |       5 | OS   | DBMS | DWDM |    55 |         90 |
+| Sunny |       6 | OS   | DBMS | DWDM |    70 |         98 |
++-------+---------+------+------+------+-------+------------+
+5 rows in set (0.01 sec)
+
+mysql> select * from courses;
++--------+---------+---------+---------+---------+
+| course1| course2 | course3 | course4 | Roll_No |
++--------+---------+---------+---------+---------+
+| ai     | ml      | ds      | cp      |       2 |
++--------+---------+---------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> create table t(qty int, price int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into t values(5, 50);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create view v as select qty, price, qty*price as value from t;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from v;
++------+-------+-------+
+| qty  | price | value |
++------+-------+-------+
+|    5 |    50 |   250 |
++------+-------+-------+
+1 row in set (0.01 sec)
+
+mysql> select * from t;
++------+-------+
+| qty  | price |
++------+-------+
+|    5 |    50 |
++------+-------+
+1 row in set (0.00 sec)
+

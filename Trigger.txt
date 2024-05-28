@@ -1,0 +1,131 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sample             |
+| test               |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> create database bank;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use bank;
+Database changed
+
+mysql> create table account(accno int, amount int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into account values(101, 100), (102, 100), (103, 0);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from account;
++-------+--------+
+| accno | amount |
++-------+--------+
+|   101 |    100 |
+|   102 |    100 |
+|   103 |      0 |
++-------+--------+
+3 rows in set (0.00 sec)
+
+mysql> delimiter @@
+mysql> create trigger upcheck1 before insert on account
+    -> for each row
+    -> begin
+    -> if new.amount < 0 then
+    -> set new.amount = 0;
+    -> elseif new.amount > 100 then
+    -> set new.amount = 100;
+    -> end if;
+    -> end;
+    -> @@
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into account values(102, 400);
+    -> select * from account;
+    -> @@
+Query OK, 1 row affected (0.01 sec)
+
++-------+--------+
+| accno | amount |
++-------+--------+
+|   101 |    100 |
+|   102 |    100 |
+|   103 |      0 |
+|   102 |    100 |
++-------+--------+
+4 rows in set (0.01 sec)
+
+mysql> insert into account values(103, -600);
+    -> select * from account;
+    -> @@
+Query OK, 1 row affected (0.01 sec)
+
++-------+--------+
+| accno | amount |
++-------+--------+
+|   101 |    100 |
+|   102 |    100 |
+|   103 |      0 |
+|   102 |    100 |
+|   103 |      0 |
++-------+--------+
+5 rows in set (0.01 sec)
+
+// Trigger Part 2
+
+mysql> create table account2 (acc_no int, amount int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into account2 values(101,4000),(102, 5000),(104,-567),(105,-200);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from account2;
++--------+--------+
+| acc_no | amount |
++--------+--------+
+|    101 |   4000 |
+|    102 |   5000 |
+|    104 |   -567 |
+|    105 |   -200 |
++--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> delimiter $$
+mysql> create trigger up_check4 before update on account2
+    -> for each row
+    -> begin
+    -> if new.amount<0 then
+    -> set new.amount=0;
+    -> elseif new.amount>100 then
+    -> set new.amount=100;
+    -> end if;
+    -> end;
+    -> insert into account2 values(105,-300);
+    -> $$
+Query OK, 0 rows affected (0.01 sec)
+
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from account2;
+    -> $$
++--------+--------+
+| acc_no | amount |
++--------+--------+
+|    101 |   4000 |
+|    102 |   5000 |
+|    104 |   -567 |
+|    105 |   -200 |
+|    105 |   -300 |
++--------+--------+
+5 rows in set (0.00 sec)
+
+mysql> drop trigger up_check4;
+    -> $$
+Query OK, 0 rows affected (0.01 sec)

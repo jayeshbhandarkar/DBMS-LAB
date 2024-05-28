@@ -1,0 +1,148 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bank               |
+| btech              |
+| empdata            |
+| mysql              |
+| performance_schema |
+| sample             |
+| test               |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> create database company;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use company;
+Database changed
+
+mysql> show tables;
++-------------------+
+| Tables_in_company |
++-------------------+
+| employee          |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> create table Depositor (cust_id int, cust_name varchar(20), account_type varchar(20), balance int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table borrower (cust_id int, cust_name varchar(20), loan_amount int);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> describe depositor;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| cust_id      | int(11)     | YES  |     | NULL    |       |
+| cust_name    | varchar(20) | YES  |     | NULL    |       |
+| account_type | varchar(20) | YES  |     | NULL    |       |
+| balance      | int(11)     | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> describe borrower;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| cust_id     | int(11)     | YES  |     | NULL    |       |
+| cust_name   | varchar(20) | YES  |     | NULL    |       |
+| loan_amount | int(11)     | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into depositor (cust_id, cust_name, account_type, balance) values(1, 'alice', 'saving', 9000), (2, 'bob', 'saving', 8500), (3, 'charlie', 'current', 7000), (4, 'david', 'current', 900), (5, 'eve', 'saving', 10000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from depositor;
++---------+-----------+--------------+---------+
+| cust_id | cust_name | account_type | balance |
++---------+-----------+--------------+---------+
+|       1 | alice     | saving       |    9000 |
+|       2 | bob       | saving       |    8500 |
+|       3 | charlie   | current      |    7000 |
+|       4 | david     | current      |     900 |
+|       5 | eve       | saving       |   10000 |
++---------+-----------+--------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> insert into borrower (cust_id, cust_name, loan_amount) values(3, 'charlie', 70000), (4, 'david', 90000), (5, 'eve', 1000000), (6, 'frank', 850000), (7, 'grace', 500000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from borrower;
++---------+-----------+-------------+
+| cust_id | cust_name | loan_amount |
++---------+-----------+-------------+
+|       3 | charlie   |       70000 |
+|       4 | david     |       90000 |
+|       5 | eve       |     1000000 |
+|       6 | frank     |      850000 |
+|       7 | grace     |      500000 |
++---------+-----------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> (select cust_name from depositor) union (select cust_name from borrower);
++-----------+
+| cust_name |
++-----------+
+| alice     |
+| bob       |
+| charlie   |
+| david     |
+| eve       |
+| frank     |
+| grace     |
++-----------+
+7 rows in set (0.00 sec)
+
+mysql> (select cust_name from depositor) union all (select cust_name from borrower);
++-----------+
+| cust_name |
++-----------+
+| alice     |
+| bob       |
+| charlie   |
+| david     |
+| eve       |
+| charlie   |
+| david     |
+| eve       |
+| frank     |
+| grace     |
++-----------+
+10 rows in set (0.00 sec)
+
+mysql> (select cust_name from depositor) intersect (select cust_name from borrower);
++-----------+
+| cust_name |
++-----------+
+| charlie   |
+| david     |
+| eve       |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> (select cust_name from depositor) intersect all (select cust_name from borrower);
++-----------+
+| cust_name |
++-----------+
+| charlie   |
+| david     |
+| eve       |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> (select cust_name from depositor) except (select cust_name from borrower);
++-----------+
+| cust_name |
++-----------+
+| alice     |
+| bob       |
++-----------+
+2 rows in set (0.00 sec)
+

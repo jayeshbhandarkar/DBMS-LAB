@@ -1,0 +1,197 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| btech              |
+| dbms               |
+| demo_people        |
+| demoprocedure      |
+| information_schema |
+| my                 |
+| mysql              |
+| name_database      |
+| performance_schema |
+| sample             |
+| stock              |
+| student            |
+| sys                |
+| university         |
++--------------------+
+16 rows in set (0.00 sec)
+
+mysql> create database demostudent;
+Query OK, 1 row affected (0.11 sec)
+
+mysql> use demostudent;
+Database changed
+
+mysql> create table student(stud_id int, name char(20), age int, marks int);
+Query OK, 0 rows affected (0.35 sec)
+
+mysql> insert into student values(1, 'Akash', 19, 76), (2, 'Dipali', 20, 80), (3, 'Pratik', 20, 80), (4, 'Suresh', 19, 68);
+Query OK, 4 rows affected (0.08 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++---------+--------+------+-------+
+| stud_id | name   | age  | marks |
++---------+--------+------+-------+
+|       1 | Akash  |   19 |    76 |
+|       2 | Dipali |   20 |    80 |
+|       3 | Pratik |   20 |    80 |
+|       4 | Suresh |   19 |    68 |
++---------+--------+------+-------+
+4 rows in set (0.01 sec)
+
+mysql> select avg(marks) as AvgMarks from student;
++----------+
+| AvgMarks |
++----------+
+|  76.0000 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select avg(age) as Avgage from student;
++---------+
+| Avgage  |
++---------+
+| 19.5000 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) as Number_student from student;
++----------------+
+| Number_student |
++----------------+
+|              4 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select max(marks) as MaxMarks from student;
++----------+
+| MaxMarks |
++----------+
+|       80 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select min(marks) as MinMarks from student;
++----------+
+| MinMarks |
++----------+
+|       68 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select sum(age) as TotalAge from student;
++----------+
+| TotalAge |
++----------+
+|       78 |
++----------+
+1 row in set (0.01 sec)
+
+mysql> select sum(marks) as TotalMarks from student;
++------------+
+| TotalMarks |
++------------+
+|        304 |
++------------+
+1 row in set (0.01 sec)
+
+mysql> select ucase(name) from student;
++-------------+
+| ucase(name) |
++-------------+
+| AKASH       |
+| DIPALI      |
+| PRATIK      |
+| SURESH      |
++-------------+
+4 rows in set (0.01 sec)
+
+mysql> select lcase(name) from student;
++-------------+
+| lcase(name) |
++-------------+
+| akash       |
+| dipali      |
+| pratik      |
+| suresh      |
++-------------+
+4 rows in set (0.00 sec)
+
+mysql> select mid(name, 1, 4) from student;
++-----------------+
+| mid(name, 1, 4) |
++-----------------+
+| Akas            |
+| Dipa            |
+| Prat            |
+| Sure            |
++-----------------+
+4 rows in set (0.00 sec)
+
+mysql> select length(name) from student;
++--------------+
+| length(name) |
++--------------+
+|            5 |
+|            6 |
+|            6 |
+|            6 |
++--------------+
+4 rows in set (0.00 sec)
+
+mysql> select name, now() as DateTime from student;
++--------+---------------------+
+| name   | DateTime            |
++--------+---------------------+
+| Akash  | 2024-05-03 16:34:51 |
+| Dipali | 2024-05-03 16:34:51 |
+| Pratik | 2024-05-03 16:34:51 |
+| Suresh | 2024-05-03 16:34:51 |
++--------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql> create table customer(Customer_id int, Customer_name varchar(20), age int);
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> insert into customer values(1, 'Bob', 28), (2, 'Suzi', 35), (3, 'John', 40), (4, 'Joseph', 18), (5, 'Peter', 32), (6, 'Stephen', 45);
+Query OK, 6 rows affected (0.08 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> delimiter @@
+mysql> create function Customer_Occupation(age int)
+    -> returns varchar(20)
+    -> deterministic
+    -> begin
+    -> declare customer_occupation varchar(20);
+    -> if age > 35 then
+    -> set customer_occupation = 'Scientist';
+    -> elseif (age <= 35 and age >=30) then
+    -> set customer_occupation = 'Engineer';
+    -> elseif age < 30 then
+    -> set customer_occupation = 'Actor';
+    -> end if;
+    -> return (customer_occupation);
+    -> end
+    -> @@
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> select Customer_id, Customer_name, age, Customer_Occupation(age)
+    -> from customer order by age;
+    -> @@
++-------------+---------------+------+--------------------------+
+| Customer_id | Customer_name | age  | Customer_Occupation(age) |
++-------------+---------------+------+--------------------------+
+|           4 | Joseph        |   18 | Actor                    |
+|           1 | Bob           |   28 | Actor                    |
+|           5 | Peter         |   32 | Engineer                 |
+|           2 | Suzi          |   35 | Engineer                 |
+|           3 | John          |   40 | Scientist                |
+|           6 | Stephen       |   45 | Scientist                |
++-------------+---------------+------+--------------------------+
+6 rows in set (0.01 sec)
+
+
